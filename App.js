@@ -1,41 +1,60 @@
-import React, { useState, useContext } from "react";
-import { StyleSheet, View, Image } from "react-native";
-import Constants from "expo-constants";
+import React, { useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
+const Stack = createStackNavigator();
+
+// Component imports
 import ThemeContext from "./components/ThemeContext";
-import ThemeBoxes from "./components/ThemeBoxes";
-import logo from "./assets/Ouigo_logo.png";
 
-const contextValue = {
-  themeColor: "#01A1D5",
-  themeBoxColor: "#E50A70",
-  iconSize: 60,
-  iconColor: "white"
-};
+// Container imports
+import HomeScreen from "./containers/HomeScreen";
+import BookingScreen from "./containers/BookingScreen";
+import StationScreen from "./containers/StationScreen";
 
 const App = () => {
+  const [userToken, setUserToken] = useState("");
+
+  const contextValue = {
+    themeColor: "#01A1D5",
+    themeBoxColor: "#E50A70",
+    iconSize: 60,
+    iconColor: "white",
+    userToken,
+    setUserToken,
+    stationsURL:
+      "https://www.ouigo.com/api/journeys-allowed-by-station-code?station_code=PT1"
+  };
+
   return (
     <ThemeContext.Provider value={contextValue}>
-      <View style={styles.container}>
-        <Image style={styles.image} resizeMode="contain" source={logo}></Image>
-        <ThemeBoxes />
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {/* Home Screen */}
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ header: () => null }}
+          />
+          {/* Booking Screen */}
+          <Stack.Screen
+            name="Booking"
+            component={BookingScreen}
+            options={{ header: () => null }}
+          />
+          {/* Station Screen */}
+          <Stack.Screen
+            name="Station"
+            component={StationScreen}
+            options={{ header: () => null }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </ThemeContext.Provider>
   );
 };
 
 export default App;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: contextValue.themeColor,
-    paddingTop: Constants.statusBarHeight,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  image: {
-    width: "20%",
-    height: "10%"
-  }
-});
+// https://www.ouigo.com/api/journeys-allowed-by-station-code?station_code=PT1
+// https://www.ouigo.com/ajax/station/closest?lgt=2.2635708&lat=48.8276497

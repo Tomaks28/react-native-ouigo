@@ -6,13 +6,16 @@ import {
   MaterialCommunityIcons,
   Ionicons
 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/core";
 
 import ThemeContext from "../components/ThemeContext";
 
 const ThemeBox = props => {
   const contextValue = useContext(ThemeContext);
+  const navigation = useNavigation();
 
   let icon = null;
+  let screen = "";
 
   switch (props.iconName) {
     case "train":
@@ -23,6 +26,7 @@ const ThemeBox = props => {
           color={contextValue.iconColor}
         />
       );
+      screen = "Booking";
       break;
     case "ticket":
       icon = (
@@ -32,6 +36,7 @@ const ThemeBox = props => {
           color={contextValue.iconColor}
         />
       );
+      screen = "Tickets";
       break;
     case "pencil":
       icon = (
@@ -41,6 +46,7 @@ const ThemeBox = props => {
           color={contextValue.iconColor}
         />
       );
+      screen = "Modification";
       break;
     case "time":
       icon = (
@@ -50,6 +56,7 @@ const ThemeBox = props => {
           color={contextValue.iconColor}
         />
       );
+      screen = "Information";
       break;
     case "help":
       icon = (
@@ -59,6 +66,7 @@ const ThemeBox = props => {
           color={contextValue.iconColor}
         />
       );
+      screen = "Help";
       break;
     case "subscribe":
       icon = (
@@ -68,6 +76,7 @@ const ThemeBox = props => {
           color={contextValue.iconColor}
         />
       );
+      screen = "Newsletter";
       break;
     default:
     // code block
@@ -79,6 +88,9 @@ const ThemeBox = props => {
         styles.container,
         { backgroundColor: contextValue.themeBoxColor }
       ]}
+      onPress={() => {
+        navigation.navigate(screen);
+      }}
     >
       {icon}
       <Text style={styles.text}>{props.text}</Text>
@@ -94,7 +106,9 @@ const styles = StyleSheet.create({
     width: "49%",
     marginBottom: 10,
     borderRadius: 15,
-    paddingTop: 10
+    paddingTop: 10,
+    justifyContent: "center",
+    height: 100
   },
   image: {
     resizeMode: "contain"

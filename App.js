@@ -11,6 +11,7 @@ import ThemeContext from "./components/ThemeContext";
 import HomeScreen from "./containers/HomeScreen";
 import BookingScreen from "./containers/BookingScreen";
 import StationScreen from "./containers/StationScreen";
+import CalendarScreen from "./containers/CalendarScreen";
 
 const App = () => {
   const [userToken, setUserToken] = useState("");
@@ -46,6 +47,12 @@ const App = () => {
           <Stack.Screen
             name="Station"
             component={StationScreen}
+            options={{ header: () => null }}
+          />
+          {/* Calendar Screen */}
+          <Stack.Screen
+            name="Calendar"
+            component={CalendarScreen}
             options={{ header: () => null }}
           />
         </Stack.Navigator>

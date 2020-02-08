@@ -16,7 +16,6 @@ import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 
 import ThemeContext from "../components/ThemeContext";
-import { FlatList } from "react-native-gesture-handler";
 
 const StationScreen = ({ route }) => {
   const contextValue = useContext(ThemeContext);

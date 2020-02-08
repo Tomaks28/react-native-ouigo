@@ -1,6 +1,14 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, View, TextInput, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  Dimensions
+} from "react-native";
 import { useNavigation } from "@react-navigation/core";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 
 import Constants from "expo-constants";
 
@@ -9,7 +17,12 @@ import Header from "../components/Header";
 
 const BookingScreen = () => {
   const contextValue = useContext(ThemeContext);
-  const [data, setData] = useState({ departure: "", arrival: "" });
+  const [data, setData] = useState({
+    departure: "",
+    arrival: "",
+    departureDate: "",
+    arrivalDate: ""
+  });
   const navigation = useNavigation();
 
   const updateDepartureStation = station => {
@@ -20,10 +33,15 @@ const BookingScreen = () => {
     setData({ ...data, arrival: station });
   };
 
+  const updateDepartureDate = date => {
+    setData({ ...data, departureDate: date.toString().substr(0, 10) });
+  };
+
   return (
     <View
       style={[styles.container, { backgroundColor: contextValue.themeColor }]}
     >
+      {/* Header */}
       <Header close={true} />
       <View
         style={{
@@ -33,13 +51,12 @@ const BookingScreen = () => {
           marginTop: 10
         }}
       >
+        {/* Stations Selection */}
+        {/* Depart Station */}
         <Text style={[styles.margin, styles.text]}>Gare de départ</Text>
         <TextInput
           style={[styles.input, styles.margin]}
           onFocus={() => {
-            navigation.setOptions({
-              setDataFunc: updateArrivalStation
-            });
             navigation.navigate("Station", {
               title: "Gare de départ",
               setDataFunc: updateDepartureStation
@@ -47,13 +64,24 @@ const BookingScreen = () => {
           }}
           value={data.departure}
         />
-        <Text style={[styles.margin, styles.text]}>Gare d'arrivée</Text>
+        {/* permute Stations */}
+        <TouchableOpacity
+          style={[styles.margin, { alignItems: "flex-end", paddingRight: 20 }]}
+          onPress={() => {
+            setData({
+              ...data,
+              departure: data.arrival,
+              arrival: data.departure
+            });
+          }}
+        >
+          <Entypo name="cycle" size={30} color={contextValue.themeColor} />
+        </TouchableOpacity>
+        {/* Depart Station */}
+        <Text style={[styles.text]}>Gare d'arrivée</Text>
         <TextInput
           style={[styles.input, styles.margin]}
           onFocus={() => {
-            navigation.setOptions({
-              setDataFunc: updateArrivalStation
-            });
             navigation.navigate("Station", {
               title: "Gare d'arrivée",
               setDataFunc: updateArrivalStation
@@ -61,6 +89,61 @@ const BookingScreen = () => {
           }}
           value={data.arrival}
         />
+
+        {/****************************** Date Selection ******************************/}
+        {/* Departure Date */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 10
+          }}
+        >
+          <View>
+            <Text style={[styles.text]}>aller</Text>
+            <TextInput
+              style={[styles.input, styles.margin, styles.dateInput]}
+              onFocus={() => {
+                navigation.navigate("Station", {
+                  title: "Gare d'arrivée",
+                  setDataFunc: updateArrivalStation
+                });
+              }}
+              value={data.departureDate}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Calendar", {
+                  title: "Date de départ",
+                  setDataFunc: updateDepartureDate
+                });
+              }}
+            >
+              <FontAwesome
+                name="calendar"
+                size={30}
+                color={contextValue.themeColor}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* Arrival Date */}
+          <View>
+            <Text style={[styles.text]}>retour</Text>
+            <TextInput
+              style={[styles.input, styles.margin, styles.dateInput]}
+              onFocus={() => {
+                navigation.setOptions({
+                  setDataFunc: updateArrivalStation
+                });
+                navigation.navigate("Station", {
+                  title: "Gare d'arrivée",
+                  setDataFunc: updateArrivalStation
+                });
+              }}
+              value={data.arrivalDate}
+            />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -90,5 +173,9 @@ const styles = StyleSheet.create({
   },
   text: {
     textTransform: "uppercase"
+  },
+  dateInput: {
+    width: Dimensions.get("window").width * 0.45,
+    textAlign: "center"
   }
 });

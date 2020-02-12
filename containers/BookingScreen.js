@@ -20,10 +20,11 @@ const BookingScreen = () => {
   const [data, setData] = useState({
     departure: "",
     arrival: "",
-    departureDate: "",
+    departureDate: new Date().toString().substr(0, 10),
     arrivalDate: ""
   });
   const navigation = useNavigation();
+  console.log(new Date().toString());
 
   const updateDepartureStation = station => {
     setData({ ...data, departure: station });
@@ -35,6 +36,10 @@ const BookingScreen = () => {
 
   const updateDepartureDate = date => {
     setData({ ...data, departureDate: date.toString().substr(0, 10) });
+  };
+
+  const updateArrivalDate = date => {
+    setData({ ...data, arrivalDate: date.toString().substr(0, 10) });
   };
 
   return (
@@ -104,9 +109,9 @@ const BookingScreen = () => {
             <TextInput
               style={[styles.input, styles.margin, styles.dateInput]}
               onFocus={() => {
-                navigation.navigate("Station", {
-                  title: "Gare d'arrivée",
-                  setDataFunc: updateArrivalStation
+                navigation.navigate("Calendar", {
+                  title: "Date de départ",
+                  setDataFunc: updateDepartureDate
                 });
               }}
               value={data.departureDate}
@@ -132,12 +137,9 @@ const BookingScreen = () => {
             <TextInput
               style={[styles.input, styles.margin, styles.dateInput]}
               onFocus={() => {
-                navigation.setOptions({
-                  setDataFunc: updateArrivalStation
-                });
-                navigation.navigate("Station", {
-                  title: "Gare d'arrivée",
-                  setDataFunc: updateArrivalStation
+                navigation.navigate("Calendar", {
+                  title: "Date d'arrivée",
+                  setDataFunc: updateArrivalDate
                 });
               }}
               value={data.arrivalDate}
